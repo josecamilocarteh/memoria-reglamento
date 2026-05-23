@@ -3,6 +3,7 @@ import { supabase } from './supabaseClient'
 import Login from './components/Login'
 import Lista from './components/Lista'
 import Formulario from './components/Formulario'
+import Hemiciclo from './components/Hemiciclo'
 
 const TEMAS = [
   'Votaciones', 'Urgencias', 'Comisiones', 'Sesiones', 'Indicaciones',
