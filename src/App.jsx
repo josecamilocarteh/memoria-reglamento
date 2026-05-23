@@ -30,7 +30,7 @@ export default function App() {
   const [consultas, setConsultas] = useState([])
   const [loading, setLoading] = useState(true)
   const [filtroTema, setFiltroTema] = useState('Todos')
-  const [view, setView] = useState('lista') // lista | nueva | editar
+  const [view, setView] = useState('lista')
   const [editando, setEditando] = useState(null)
   const [showLogin, setShowLogin] = useState(false)
   const [toast, setToast] = useState(null)
@@ -109,11 +109,18 @@ export default function App() {
       {/* HEADER */}
       <header style={styles.header}>
         <div style={styles.headerInner}>
-          <div>
-  <div style={styles.eyebrow}>República de Chile</div>
-  <h1 style={styles.title}>Memoria del Reglamento</h1>
-  <div style={styles.subtitle}>Cámara de Diputadas y Diputados · Reglamento 2023</div>
-</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <img
+              src="https://raw.githubusercontent.com/josecamilocarteh/memoria-reglamento/main/WhatsApp%20Image%202026-05-20%20at%2018.12.07.jpeg"
+              alt="Logo Patricio Pinilla"
+              style={{ height: 70, width: 'auto', borderRadius: 8 }}
+            />
+            <div>
+              <div style={styles.eyebrow}>República de Chile</div>
+              <h1 style={styles.title}>Memoria del Reglamento</h1>
+              <div style={styles.subtitle}>Cámara de Diputadas y Diputados · Reglamento 2023</div>
+            </div>
+          </div>
           <div style={styles.headerRight}>
             <div style={styles.countBadge}>{consultas.length} consulta{consultas.length !== 1 ? 's' : ''}</div>
             {session ? (
@@ -141,6 +148,25 @@ export default function App() {
       )}
 
       <main style={styles.main}>
+        {/* TABS */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+          <button onClick={() => { setView('lista'); setEditando(null) }}
+            style={{ ...styles.tabBtn, background: view === 'lista' ? '#1a3a5c' : '#e2e8f0', color: view === 'lista' ? 'white' : '#333' }}>
+            Consultas
+          </button>
+          <button onClick={() => setView('hemiciclo')}
+            style={{ ...styles.tabBtn, background: view === 'hemiciclo' ? '#0f2744' : '#e2e8f0', color: view === 'hemiciclo' ? 'white' : '#333' }}>
+            🏛 Senado
+          </button>
+          {session && (
+            <button onClick={() => { setEditando(null); setView('nueva') }}
+              style={{ ...styles.tabBtn, background: (view === 'nueva' || view === 'editar') ? '#1a3a5c' : '#e2e8f0', color: (view === 'nueva' || view === 'editar') ? 'white' : '#333' }}>
+              + Nueva consulta
+            </button>
+          )}
+        </div>
+
+        {/* VISTAS */}
         {(view === 'nueva' || view === 'editar') && session ? (
           <Formulario
             temas={TEMAS}
@@ -149,6 +175,8 @@ export default function App() {
             onGuardar={handleGuardar}
             onCancelar={() => { setView('lista'); setEditando(null) }}
           />
+        ) : view === 'hemiciclo' ? (
+          <Hemiciclo />
         ) : (
           <Lista
             consultas={consultasFiltradas}
@@ -170,14 +198,15 @@ export default function App() {
 const styles = {
   root: { fontFamily: "'Source Sans 3', sans-serif", minHeight: '100vh', background: '#f7f8fa', color: '#1a1a2e' },
   header: { background: '#0f2744', position: 'relative', overflow: 'hidden' },
-  headerInner: { maxWidth: 900, margin: '0 auto', padding: '32px 24px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16, flexWrap: 'wrap' },
-  eyebrow: { fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: '#c9a84c', marginBottom: 6, fontWeight: 600 },
-  title: { fontFamily: "'Playfair Display', serif", fontSize: 28, color: 'white', margin: 0, lineHeight: 1.2 },
-  subtitle: { fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4, fontWeight: 300 },
+  headerInner: { maxWidth: 900, margin: '0 auto', padding: '24px 24px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' },
+  eyebrow: { fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', color: '#c9a84c', marginBottom: 4, fontWeight: 600 },
+  title: { fontFamily: "'Playfair Display', serif", fontSize: 26, color: 'white', margin: 0, lineHeight: 1.2 },
+  subtitle: { fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 4, fontWeight: 300 },
   headerRight: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10 },
   countBadge: { background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)', color: '#e8c96a', fontSize: 12, fontWeight: 600, padding: '4px 12px', borderRadius: 20 },
   btnPrimary: { padding: '8px 20px', background: '#c9a84c', color: '#0f2744', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 700, fontSize: 14, fontFamily: "'Source Sans 3', sans-serif" },
   btnSecondary: { padding: '8px 16px', background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 13, fontFamily: "'Source Sans 3', sans-serif" },
   toast: { position: 'fixed', top: 20, right: 20, padding: '12px 20px', borderRadius: 8, fontSize: 14, fontWeight: 600, zIndex: 1000, boxShadow: '0 4px 12px rgba(0,0,0,0.15)' },
   main: { maxWidth: 900, margin: '0 auto', padding: '28px 24px 60px' },
+  tabBtn: { padding: '9px 20px', borderRadius: 8, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, fontFamily: "'Source Sans 3', sans-serif", transition: 'all 0.15s' },
 }
