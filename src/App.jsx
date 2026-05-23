@@ -108,17 +108,10 @@ export default function App() {
       {/* HEADER */}
       <header style={styles.header}>
         <div style={styles.headerInner}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-  <img 
-    src="https://raw.githubusercontent.com/josecamilocarteh/memoria-reglamento/main/WhatsApp%20Image%202026-05-20%20at%2018.12.07.jpeg"
-    alt="Logo Patricio Pinilla"
-    style={{ height: 70, width: 'auto', borderRadius: 8 }}
-  />
-  <div>
-    <div style={styles.eyebrow}>República de Chile</div>
-    <h1 style={styles.title}>Memoria del Reglamento</h1>
-    <div style={styles.subtitle}>Cámara de Diputadas y Diputados · Reglamento 2023</div>
-  </div>
+          <div>
+  <div style={styles.eyebrow}>República de Chile</div>
+  <h1 style={styles.title}>Memoria del Reglamento</h1>
+  <div style={styles.subtitle}>Cámara de Diputadas y Diputados · Reglamento 2023</div>
 </div>
           <div style={styles.headerRight}>
             <div style={styles.countBadge}>{consultas.length} consulta{consultas.length !== 1 ? 's' : ''}</div>
